@@ -13,14 +13,16 @@ import { tryCatchWrapper } from "../../utilities/requestHandler/tryCatchWrapper"
 const controller: RequestHandler<{}, {}, IAuthRequestBody> = async (req, res, next) => {
     const { password, username } = req.body;
 
-    const user = await userService.getUser(username);
+    let user = await userService.getUser(username);
 
-    if (user === null) return res.status(400).json({ message: "username isn't registered" });
+    if (user === null) {
+        user = await userService.createUser(username, password, "teacher");
+    }
+    else {
+        const isPasswordValid = await compare(password, user.password)
 
-
-    const isPasswordValid = await compare(password, user.password)
-
-    if (isPasswordValid === false) return res.status(400).json({ message: "username and password donot match" });
+        if (isPasswordValid === false) return res.status(400).json({ message: "username and password donot match" });
+    }
 
     const accessToken = await createAccessToken({ username });
     const refreshToken = await createRefreshToken({ username });
@@ -34,4 +36,4 @@ const controller: RequestHandler<{}, {}, IAuthRequestBody> = async (req, res, ne
 
 
 
-export const loginController = tryCatchWrapper(controller);
+export const teacherLoginController = tryCatchWrapper(controller);

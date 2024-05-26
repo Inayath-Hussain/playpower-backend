@@ -1,3 +1,4 @@
+import { compare } from "bcrypt";
 import { RequestHandler } from "express";
 
 import { IAuthRequestBody } from "../../middleware/user/validateAuthRequestBody";
@@ -10,14 +11,18 @@ import { tryCatchWrapper } from "../../utilities/requestHandler/tryCatchWrapper"
 
 
 const controller: RequestHandler<{}, {}, IAuthRequestBody> = async (req, res, next) => {
-    const { username, password, role } = req.body;
+    const { password, username } = req.body;
 
-    const existingUserDoc = await userService.getUser(username);
+    let user = await userService.getUser(username);
 
-    // if a user exists with provided username then return 400 response
-    if (existingUserDoc !== null) return res.status(400).json({ message: "username already taken. choose another name" });
+    if (user === null) {
+        user = await userService.createUser(username, password, "student");
+    }
+    else {
+        const isPasswordValid = await compare(password, user.password)
 
-    const user = await userService.createUser(username, password, role);
+        if (isPasswordValid === false) return res.status(400).json({ message: "username and password donot match" });
+    }
 
     const accessToken = await createAccessToken({ username });
     const refreshToken = await createRefreshToken({ username });
@@ -25,10 +30,10 @@ const controller: RequestHandler<{}, {}, IAuthRequestBody> = async (req, res, ne
     signAccessTokenCookie(res, accessToken);
     signRefreshTokenCookie(res, refreshToken);
 
-    res.status(201).json({ message: "success" });
+
+    return res.status(200).json({ message: "success" })
 }
 
 
 
-
-export const registerController = tryCatchWrapper(controller);
+export const studentLoginController = tryCatchWrapper(controller);

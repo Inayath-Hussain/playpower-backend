@@ -1,5 +1,4 @@
 import { Role } from "@prisma/client";
-import { isLength, isStrongPassword } from "validator"
 
 
 interface Valid {
@@ -38,40 +37,13 @@ export const passwordValidator = (value: any): Valid | InValid => {
             return { valid: false, errorMessage: "password is required" }
 
 
-        case (typeof value === "number"):
-            return { valid: false, errorMessage: "password should contain letters" }
+        // if value is anything other than number or string
+        case (typeof value !== "number" && typeof value !== "string"):
+            return { valid: false, errorMessage: "password should numbers or letters" }
 
-        case (typeof value !== "string"):
-            return { valid: false, errorMessage: "password should be of type string" }
-
-        // checks if password meets length requirement
-        case (isLength(value, { min: 8 }) === false):
-            return { valid: false, errorMessage: "password must be 8 letters long" }
-
-        // checks if password meets constraints
-        case (isStrongPassword(value, { minNumbers: 1, minSymbols: 1, minUppercase: 1 }) === false):
-            return { valid: false, errorMessage: "password must contain atleast 1 number, 1 upper case letter and 1 special symbol" }
 
         default:
             return { valid: true }
     }
 }
 
-
-
-export const roleValidator = (value: any): Valid | InValid => {
-    switch (true) {
-        case (!value):
-            return { valid: false, errorMessage: "role is required" }
-
-        case (typeof value !== "string"):
-            return { valid: false, errorMessage: "role should be of type string" }
-
-
-        case (Object.keys(Role).includes(value) === false):
-            return { valid: false, errorMessage: `role should be one of the following ${Object.keys(Role).join(", ")}` }
-
-        default:
-            return { valid: true }
-    }
-}
