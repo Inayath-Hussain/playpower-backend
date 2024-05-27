@@ -7,8 +7,10 @@ import { getAssignmentController } from "../controller/assignments/getAssignment
 import { getAllAssignmentController } from "../controller/assignments/getAllAssignment";
 import { deleteAssignController } from "../controller/assignments/deleteAssignment";
 import { updateAssignmentController } from "../controller/assignments/updateAssignment";
-import { validateSubmitAssignMiddleware } from "../middleware/submition/validateSubmitAssign";
+import { validateSubmitAssignMiddleware } from "../middleware/assignment/validateSubmitAssign";
 import { submitAssignmentController } from "../controller/submition/submitAssignment";
+import { validateGradeAssignMiddleware } from "../middleware/assignment/validateGradeAssignBody";
+import { gradeAssignController } from "../controller/assignments/gradeAssignment";
 
 
 const router = Router();
@@ -22,6 +24,8 @@ router.patch("/:id", authMiddleware, allowTeacherOnlyMiddleware, updateAssignmen
 
 
 router.post("/:id/submit", authMiddleware, validateSubmitAssignMiddleware, submitAssignmentController);
+
+router.put("/:id/grade", authMiddleware, allowTeacherOnlyMiddleware, validateGradeAssignMiddleware, gradeAssignController)
 
 
 export { router as assignmentRouter }

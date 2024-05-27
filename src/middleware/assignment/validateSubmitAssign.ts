@@ -1,10 +1,9 @@
 import { RequestHandler } from "express";
 import { sanitizeAll } from "../sanitizeBase";
-import { assignmentIdValidator, contentValidator } from "./validator";
+import { idValidator, contentValidator } from "./validator";
 
 
 export interface ISubmitAssignBody {
-    assignmentId: number
     content: string
 }
 
@@ -12,9 +11,8 @@ export interface ISubmitAssignBody {
 export const validateSubmitAssignMiddleware: RequestHandler<{}, {}, ISubmitAssignBody> = (req, res, next) => {
     sanitizeAll(req.body);
 
-    const { assignmentId, content } = req.body;
+    const { content } = req.body;
 
-    const assignIdValidationResult = assignmentIdValidator(assignmentId);
     const contentValidationResult = contentValidator(content);
 
 
@@ -24,9 +22,6 @@ export const validateSubmitAssignMiddleware: RequestHandler<{}, {}, ISubmitAssig
     }
 
     switch (true) {
-        case (assignIdValidationResult.valid === false):
-            return sendErrorResponse(assignIdValidationResult.errorMessage)
-
         case (contentValidationResult.valid === false):
             return sendErrorResponse(contentValidationResult.errorMessage);
     }

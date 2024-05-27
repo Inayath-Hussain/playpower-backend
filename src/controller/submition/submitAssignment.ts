@@ -1,12 +1,18 @@
 import { RequestHandler } from "express";
 import { tryCatchWrapper } from "../../utilities/requestHandler/tryCatchWrapper";
-import { ISubmitAssignBody } from "../../middleware/submition/validateSubmitAssign";
+import { ISubmitAssignBody } from "../../middleware/assignment/validateSubmitAssign";
 import { assignmentService } from "../../services/assignment";
 import { submitionService } from "../../services/submition";
 
-const controller: RequestHandler<{}, {}, ISubmitAssignBody> = async (req, res, next) => {
-    const { assignmentId, content } = req.body;
+const controller: RequestHandler<any, {}, ISubmitAssignBody> = async (req, res, next) => {
+    const { content } = req.body;
     const studentId = req.user_id as number;
+
+    const { id } = req.params;
+
+    const assignmentId = Number(id);
+    if (isNaN(assignmentId)) return res.status(400).json({ message: "Invalid Id" })
+
 
     const assignment = await assignmentService.getAssignment(assignmentId)
 

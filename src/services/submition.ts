@@ -10,6 +10,10 @@ class SubmitionService {
         return await prisma.submission.create({ data: { content, assignmentId, studentId } })
     }
 
+
+    async gradeAssignment(assignmentId: number, id: number, grade: string) {
+        return await prisma.submission.update({ where: { assignmentId, id }, data: { grade } })
+    }
 }
 
 

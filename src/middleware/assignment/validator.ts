@@ -37,3 +37,53 @@ export const dueDateValidor = (value: any): Valid | InValid => {
             return { valid: true }
     }
 }
+
+
+
+
+
+
+export const idValidator = (value: any): Valid | InValid => {
+    switch (true) {
+        case (!value):
+            return { valid: false, errorMessage: "assignment id is required" }
+
+        case (typeof value !== "number"):
+            return { valid: false, errorMessage: "assignment id is invalid" }
+
+        default:
+            return { valid: true }
+    }
+}
+
+
+export const contentValidator = (value: any): Valid | InValid => {
+    switch (true) {
+        case (!value):
+            return { valid: false, errorMessage: "content is required" }
+
+        case (typeof value !== "string" && typeof value !== "number"):
+            return { valid: false, errorMessage: "content is invalid" }
+
+        default:
+            return { valid: true }
+    }
+}
+
+
+
+export const gradeValidator = (value: any): Valid | InValid => {
+    switch (true) {
+        case (!value):
+            return { valid: false, errorMessage: "grade is required" }
+
+        case (typeof value !== "string" && typeof value !== "number"):
+            return { valid: false, errorMessage: "grade should be a number or string" }
+
+        case (typeof value === "string" && value.length > 5):
+            return { valid: false, errorMessage: "Invalid grade" }
+
+        default:
+            return { valid: true }
+    }
+}
