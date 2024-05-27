@@ -19,6 +19,11 @@ class AssignmentService {
     async deleteAssignment(id: number) {
         return await prisma.assignment.delete({ where: { id } })
     }
+
+
+    async updateAssignment(id: number, title: string, description: string, dueDate: string) {
+        return await prisma.assignment.update({ where: { id }, data: { title, description, dueDate: new Date(dueDate) } })
+    }
 }
 
 
