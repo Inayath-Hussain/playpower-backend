@@ -22,6 +22,8 @@ const controller: RequestHandler<{}, {}, IAuthRequestBody> = async (req, res, ne
         const isPasswordValid = await compare(password, user.password)
 
         if (isPasswordValid === false) return res.status(400).json({ message: "username and password donot match" });
+
+        if (user.role === "teacher") return res.status(401).json({ message: "user exists as teacher" })
     }
 
     const accessToken = await createAccessToken({ username });

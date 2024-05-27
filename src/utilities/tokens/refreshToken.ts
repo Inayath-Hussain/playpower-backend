@@ -86,7 +86,7 @@ export const renewRefreshToken = async (refreshToken: string): Promise<RenewRetu
     if (result.valid) {
         const { payload } = result
 
-        if (!payload.iat || !payload.user_id) return { refreshToken, valid: false }
+        if (!payload.iat || !payload.username) return { refreshToken, valid: false }
 
         // check creation date
         // renew if issue date is older than 1 day.

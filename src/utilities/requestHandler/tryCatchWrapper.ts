@@ -5,8 +5,8 @@ export const tryCatchWrapper = (asyncRequestHandler: RequestHandler): RequestHan
     try {
         await asyncRequestHandler(req, res, next)
     }
-    catch (ex) {
+    catch (ex: any) {
         console.log(ex)
-        next({ statusCode: 500, message: "Internal server error" } as Ierror)
+        next({ statusCode: 500, message: ex.message || "Internal server error" } as Ierror)
     }
 }
