@@ -7,6 +7,8 @@ import { getAssignmentController } from "../controller/assignments/getAssignment
 import { getAllAssignmentController } from "../controller/assignments/getAllAssignment";
 import { deleteAssignController } from "../controller/assignments/deleteAssignment";
 import { updateAssignmentController } from "../controller/assignments/updateAssignment";
+import { validateSubmitAssignMiddleware } from "../middleware/submition/validateSubmitAssign";
+import { submitAssignmentController } from "../controller/submition/submitAssignment";
 
 
 const router = Router();
@@ -18,6 +20,8 @@ router.get("/", getAllAssignmentController);
 router.delete("/:id", authMiddleware, allowTeacherOnlyMiddleware, deleteAssignController);
 router.patch("/:id", authMiddleware, allowTeacherOnlyMiddleware, updateAssignmentController);
 
+
+router.post("/:id/submit", authMiddleware, validateSubmitAssignMiddleware, submitAssignmentController);
 
 
 export { router as assignmentRouter }
