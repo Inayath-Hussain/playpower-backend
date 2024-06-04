@@ -6,6 +6,9 @@
 - prisma
 - Docker
 
+## Api Documentation
+Link for api documentation - [POSTMAN](https://documenter.getpostman.com/view/24398247/2sA3Qs9rRc)
+
 
 ## Steps to run project locally
 Clone this repository and run
